@@ -3,131 +3,175 @@ const loadData = async () => {
     await fetch`https://openapi.programming-hero.com/api/videos/category/1000`;
   const data = await res.json();
   const catagories = data.data;
-  DisplayCatagory(catagories);
+  DisplayAllCatagory(catagories);
 };
-const DisplayCatagory = (catagories) => {
+const DisplayAllCatagory = (catagories) => {
   //   console.log(catagories);
+  //   console.log("all btn clicked");document.getElementById("show-all-container").style.display = "none";
+  document.getElementById("Music-container").style.display = "none";
+  document.getElementById("Comedy-container").style.display = "none";
+  document.getElementById("Drawing-container").style.display = "none";
+
+  // Show the Music-container only
+  document.getElementById("show-all-container").style.display = "grid";
+
   catagories.forEach((catagory) => {
     console.log(catagory);
     const catagoryContainer = document.getElementById("show-all-container");
     const catagoryCard = document.createElement("div");
-    catagoryCard.classList = `card w-70 gap-12  bg-gray-100 shadow-xl`;
+    catagoryCard.classList = `card w-70 gap-12 mt-6 bg-gray-100 shadow-xl`;
     catagoryCard.innerHTML = `
-     <figure>
-              <img class="w-full mb-6"
-                src="${catagory.thumbnail}"
-                alt="Shoes" />
-            </figure>
-            <div class="card-body">
-            <div class="flex gap-2">
-            <img src="${catagory.authors[0].profile_picture}" alt="Author Profile Picture" style="width: 30px; height: 30px; border-radius: 50%;"> 
-            <h2 class="card-title">${catagory.title}</h2>
-            </div>
-            <div class="mb-8 ">
-            <p class="text-xl">${catagory.authors[0].profile_name}</p>
-             <p class="text-2xl">${catagory.authors[0].verified}</p>
-              <p class="p">${catagory.others.views}</p>
-              
-            </div>
-             
-            </div>`;
+       <figure>
+                <img class="w-full mb-6"
+                  src="${catagory.thumbnail}"
+                   alt="Shoes" />
+               </figure>
+               <div class="card-body">
+               <div class="flex gap-2">
+               <img src="${catagory.authors[0].profile_picture}" alt="Author Profile Picture" style="width: 30px; height: 30px; border-radius: 50%;">
+               <h2 class="card-title">${catagory.title}</h2>
+              </div>
+               <div class="mb-8 ">
+               <p class="text-xl">${catagory.authors[0].profile_name}</p>
+                
+                 <p class="p">${catagory.others.views}</p>
+
+              </div>
+
+               </div>`;
     catagoryContainer.appendChild(catagoryCard);
   });
 };
+// hanle show all btn details
+const handleMusicDetails = async (id) => {
+  try {
+    const res = await fetch(
+      `https://openapi.programming-hero.com/api/videos/category/${id}`
+    );
+    const data = await res.json();
+    const categoryDetails = data.data;
 
+    if (categoryDetails && categoryDetails.length > 0) {
+      showMusicDetails(categoryDetails);
+    } else {
+      console.warn("No details found for this category.");
+    }
+  } catch (error) {
+    console.error("Error fetching music details:", error);
+  }
+};
+const showMusicDetails = (categoryDetails) => {
+  document.getElementById("show-all-container").style.display = "none";
+  document.getElementById("Comedy-container").style.display = "none";
+  document.getElementById("Drawing-container").style.display = "none";
 
-loadData();
+  // Show the Music-container only
+  document.getElementById("Music-container").style.display = "grid";
 
-//   const data = await res.json();
+  const showMusicContainer = document.getElementById("Music-container");
+  showMusicContainer.innerHTML = " "; // Clear previous content
 
-//   const div = data.data;
-//   DisplayPhones(div);
-// };
-// const DisplayDiv = (div) => {
-//   const divContainer = document.getElementById("phone-container");
-//   //   clearing phone conrainer card when we search another card
-//   divContainer.textContent = "";
-//   //   showAll container when length of the container less than 12 other then show  showAll button
-//   const showAllContainer = document.getElementById("show-all-container");
+  // Filter the data to only include items with category_id "1001"
+  const filteredDetails = categoryDetails.filter(
+    (category) => category.category_id === "1001"
+  );
 
-//   // show outcomes
-//   phones.forEach((phone) => {
-//     // console.log(phone);
-//     const phoneDiv = document.createElement("div");
-//     phoneDiv.innerHTML = `
-//       <div class="card card-compact pt-10 mb-10 bg-gray-100 gap-4 shadow-xl">
-//     <figure>
-//       <img
-//         src=${phone.image}
-//         alt="Shoes" />
-//     </figure>
-//     <div class="card-body">
-//       <h2 class="card-title">${phone.phone_name}</h2>
-//       <p>There are many variations of passages of available, but the majority have suffered</p>
+  filteredDetails.forEach((category) => {
+    if (category) {
+      const MusicCard = document.createElement("div");
+      MusicCard.classList = `card w-70 gap-12 bg-gray-100 shadow-xl`;
+      MusicCard.innerHTML = `
+          <figure>
+            <img class="w-full mb-6" src="${category.thumbnail}" alt="${category.title}" />
+          </figure>
+          <div class="card-body">
+            <div class="flex gap-2">
+             <img src="${category.authors[0].profile_picture}" alt="Author Profile Picture" style="width: 30px; height: 30px; border-radius: 50%;">
+               <h2 class="card-title">${category.title}</h2>
+              </div>
+                    <h2 class="card-title">${category.authors[0].profile_name}</h2>
+            <p>Views: ${category.others.views}</p>
+            
+          </div>
+        `;
+      showMusicContainer.appendChild(MusicCard);
+    }
+  });
+};
+const handleComedyDetails = async (id) => {
+  try {
+    const res = await fetch(
+      `https://openapi.programming-hero.com/api/videos/category/${id}`
+    );
+    const data = await res.json();
+    const categoryDetails = data.data;
 
-//       <div class="card-actions justify-center"><button onclick="handleShowDetails('${phone.slug}')" class="btn btn-primary">Show details</button>
-//       </div>
-//     </div>
-//   </div>
-//       `;
-//     phoneContainer.appendChild(phoneDiv);
-//   });
-// };
+    if (categoryDetails && categoryDetails.length > 0) {
+      showComedyDetails(categoryDetails);
+    } else {
+      console.warn("No details found for this category.");
+    }
+  } catch (error) {
+    console.error("Error fetching comedy details:", error);
+  }
+};
+const showComedyDetails = (categoryDetails) => {
+  document.getElementById("show-all-container").style.display = "none";
+  document.getElementById("Music-container").style.display = "none";
+  document.getElementById("Drawing-container").style.display = "none";
 
-// // hanle show all btn details
-// const handleShowDetails = async (id) => {
-//   //   console.log("show all btn clicked", id);
-//   const res = await fetch(
-//     `https://openapi.programming-hero.com/api/phone/${id}`
-//   );
-//   const data = await res.json();
-//   const phone = data.data;
-//   console.log(data);
-//   showDetails(phone);
-// };
-// const showDetails = (phone) => {
-//   console.log(phone);
-//   const phoneName = document.getElementById("show-modals-phone-name");
-//   phoneName.innerText = phone.name;
-//   //
-//   const showDetailsContainer = document.getElementById("show-detail-container");
-//   showDetailsContainer.innerHTML = `
-//       <img class='mb-2' src=${phone.image} alt="Phone Image" />
-//       <p><span>Storage:</span> ${phone.mainFeatures.storage}</p>
-//       <p><span>DisplaySize:>${phone.mainFeatures.displaySize}</p>
-//       <p><span>sensors:</span> ${phone.mainFeatures.sensors}</p>
-//       <p><span>memory:</span> ${phone.mainFeatures.memory}</p>
-//       <p><span>brand:</span> ${phone.brand}</p>
-//     `;
+  // Show the Music-container only
+  document.getElementById("Comedy-container").style.display = "grid";
 
-//   const myModal = document.getElementById("my_modal_5");
-//   myModal.showModal();
-// };
+  const showComedyContainer = document.getElementById("Comedy-container");
+  showComedyContainer.innerHTML = " "; // Clear previous content
 
-// // search handler
-// const searchHandler = () => {
-//   toggleLoodingSpinner(true);
-//   const searchField = document.getElementById("search-field");
-//   const searchText = searchField.value;
-//   //   console.log(searchText);
-//   loadPhone(searchText);
-// };
-// // search handler2 recap
+  // Filter the data to only include items with category_id "1001"
+  const filteredDetails = categoryDetails.filter(
+    (category) => category.category_id === "1003"
+  );
 
-// // const searchHandler2 = () => {
-// //   toggleLoodingSpinner(true);
-// //   const searchField = document.getElementById("search-field2");
-// //   const searchText = searchField.value;
-// //   loadPhone(searchText);
-// // };
-// // loading ring
-// const toggleLoodingSpinner = (isLoading) => {
-//   const LoadingSpinner = document.getElementById("loading-spinner");
-//   if (isLoading) {
-//     LoadingSpinner.classList.remove("hidden");
-//   } else {
-//     LoadingSpinner.classList.add("hidden");
-//   }
-// };
+  filteredDetails.forEach((category) => {
+    if (category) {
+      const ComedyCard = document.createElement("div");
+      ComedyCard.classList = `card w-70 gap-12 bg-gray-100 shadow-xl`;
+      ComedyCard.innerHTML = `
+          <figure>
+            <img class="w-full mb-6" src="${category.thumbnail}" alt="${category.title}" />
+          </figure>
+          <div class="card-body">
+      
+            <div class="flex gap-2">
+             <img src="${category.authors[0].profile_picture}" alt="Author Profile Picture" style="width: 30px; height: 30px; border-radius: 50%;">
+               <h2 class="card-title">${category.title}</h2>
+              </div>
+                    <h2 class="card-title">${category.authors[0].profile_name}</h2>
+            <p>Views: ${category.others.views}</p>
+           
+          </div>
+        `;
+      showComedyContainer.appendChild(ComedyCard);
+    }
+  });
+};
 
+function handleDrawingDetails() {
+  const showComedyContainer = document.getElementById("Drawing-container");
+  showComedyContainer.innerHTML = " "; // Clear previous content
+  //   console.log("drawing btn clicked");
+  document.getElementById("show-all-container").style.display = "none";
+  document.getElementById("Music-container").style.display = "none";
+  document.getElementById("Comedy-container").style.display = "none";
+
+  //   // Show the Dwaing-container only
+  document.getElementById("Drawing-container").style.display = "grid";
+  const drawingDetails = document.getElementById("Drawing-container");
+  const drawingCard = document.createElement("div");
+  drawingCard.classList = `card w-3/4  gap-12 text-center shadow-xl`;
+  drawingCard.innerHTML = `
+  <img class="w-80 px-8 justify-center" src="Icon.png" alt="" srcset="" />
+<h2>Oops!! Sorry, There is no content here</h2>
+`;
+  drawingDetails.appendChild(drawingCard);
+}
 // loadData();

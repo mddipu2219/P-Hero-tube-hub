@@ -22,18 +22,50 @@
       </nav>
       <div id="btn-container" class="flex justify-center gap-4 mt-4">
         <div>
-          <button onclick=" DisplayCatagory()" class="btn btn-neutral">
-            ALL
+          <button onclick="loadData()" class="btn btn-neutral">ALL</button>
+        </div>
+        <div>
+          <button onclick="handleMusicDetails('1001')" class="btn btn-neutral">
+            Music
           </button>
         </div>
-        <div><button class="btn btn-neutral">Music</button></div>
-        <div><button class="btn btn-neutral">Comedy</button></div>
-        <div><button class="btn btn-neutral">Drawing</button></div>
+
+        <div>
+          <button onclick="handleComedyDetails('1003')" class="btn btn-neutral">
+            Comedy
+          </button>
+        </div>
+        <div>
+          <button onclick="handleDrawingDetails()" class="btn btn-neutral">
+            Drawing
+          </button>
+        </div>
       </div>
+
       <section>
         <div
           id="show-all-container"
           class="mt-6 grid grid-cols-1 gap-6 justify-between md:grid-cols-2 lg:grid-cols-4"
+        ></div>
+
+        <!-- Music-specific container for displaying filtered results, hidden initially -->
+        <div
+          id="Music-container"
+          class="mt-6 grid grid-cols-1 gap-6 justify-between md:grid-cols-2 lg:grid-cols-4"
+          style="display: none"
+        ></div>
+        <!-- comedy-section -->
+        <div
+          id="Comedy-container"
+          class="mt-6 grid grid-cols-1 gap-6 justify-between md:grid-cols-2 lg:grid-cols-4"
+          style="display: none"
+        ></div>
+        <!-- drawing section -->
+
+        <div
+          id="Drawing-container"
+          class="mt-6 gap-6 justify-center text-3xl p-8"
+          style="display: none"
         ></div>
       </section>
     </header>
